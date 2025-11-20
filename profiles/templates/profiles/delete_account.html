@@ -1,0 +1,365 @@
+{% extends 'profiles/profile_base_layout.html' %} {% block headcontent %}
+<script src="https://www.google.com/recaptcha/api.js"></script>
+<style>
+  /* Delete Account Specific Styles */
+  .welcome-section {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .welcome-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--gradient-primary);
+  }
+
+  .welcome-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .welcome-subtitle {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin: 0;
+  }
+
+  .delete-warning-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    padding: 2.5rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .delete-warning-card h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+  }
+
+  .delete-warning-card ul {
+    list-style: none; /* Remove default bullet points */
+    padding: 0;
+    margin-bottom: 1.5rem;
+    text-align: left;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .delete-warning-card ul li {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+    position: relative;
+    padding-left: 1.5rem; /* Space for custom bullet */
+  }
+
+  .delete-warning-card ul li::before {
+    content: "\2022"; /* Unicode for a bullet point */
+    color: var(--accent-color); /* Red bullet */
+    font-size: 1.2rem;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  .delete-warning-card ul li a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+  }
+
+  .delete-warning-card ul li a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+  }
+
+  .delete-warning-card .terms-link {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+    display: block;
+  }
+
+  .delete-warning-card .terms-link a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+  }
+
+  .delete-warning-card .terms-link a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+  }
+
+  /* Modal Styling */
+  .modal-content {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+  }
+
+  .modal-header {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.5rem 2rem;
+    border-top-left-radius: var(--border-radius-lg);
+    border-top-right-radius: var(--border-radius-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modal-header .modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .modal-header .close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .modal-header .close:hover {
+    color: var(--accent-color);
+  }
+
+  .modal-body {
+    padding: 2rem;
+  }
+
+  .modal-body .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-body label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-body input[type="password"] {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .modal-body input[type="password"]:focus {
+    outline: none;
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    background-color: var(--bg-primary);
+  }
+
+  .modal-footer {
+    border-top: 1px solid var(--border-color);
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    border-bottom-left-radius: var(--border-radius-lg);
+    border-bottom-right-radius: var(--border-radius-lg);
+  }
+
+  .modal-footer .btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  .modal-footer .btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+  }
+
+  .modal-footer .btn-secondary:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+
+  /* ReCAPTCHA styling */
+  .g-recaptcha {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .welcome-section {
+      padding: 2rem;
+    }
+
+    .welcome-title {
+      font-size: 1.875rem;
+    }
+
+    .delete-warning-card {
+      padding: 2rem;
+    }
+
+    .delete-warning-card h3 {
+      font-size: 1.3rem;
+    }
+
+    .delete-warning-card ul li {
+      font-size: 0.9rem;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+      padding: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .welcome-section {
+      padding: 1.5rem;
+    }
+
+    .welcome-title {
+      font-size: 1.5rem;
+    }
+
+    .delete-warning-card {
+      padding: 1.5rem;
+    }
+
+    .delete-warning-card h3 {
+      font-size: 1.1rem;
+    }
+
+    .delete-warning-card ul li {
+      font-size: 0.85rem;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+      padding: 1rem;
+    }
+  }
+</style>
+{% endblock %} {% block bodycontent %}
+<!-- Welcome Section -->
+<div class="welcome-section">
+  <h1 class="welcome-title">Welcome back, {{ user }}!</h1>
+  <p class="welcome-subtitle">Manage your account deletion</p>
+</div>
+
+<!-- Delete Warning Card -->
+<div class="delete-warning-card">
+  <h3>Deleting the account means:</h3>
+  <ul>
+    <li>
+      Permanent loss of your account balance (so
+      <a href="{% url 'profiles:money_transfer' %}">transfer your money</a> to a
+      different account first).
+    </li>
+    <li>Permanent loss of your account data, settings, and details.</li>
+  </ul>
+
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div
+  class="modal fade"
+  id="deleteModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="deleteModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{% url 'profiles:delete_account' %}" method="POST" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+        <div class="modal-body">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="password_confirm"
+              >Enter password to confirm deletion</label
+            >
+            <input
+              type="password"
+              id="password_confirm"
+              name="password_confirm"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-danger">Delete Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %} {% block scriptcontent %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Highlight current page in sidebar
+    const deleteLink = document.getElementById("delete");
+    if (deleteLink) {
+      document
+        .querySelectorAll(".nav-card")
+        .forEach((link) => link.classList.remove("current"));
+      deleteLink.classList.add("current");
+    }
+  });
+</script>
+{% endblock %}

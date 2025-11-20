@@ -1,0 +1,566 @@
+{% extends 'profiles/profile_base_layout.html' %}
+
+{% block headcontent %}
+<script src='https://www.google.com/recaptcha/api.js'></script>
+<style>
+    /* Edit Details Specific Styles */
+    .welcome-section {
+        padding: 1.5rem 2.5rem; /* Reduced top/bottom padding */
+        margin-bottom: 1.5rem; /* Reduced margin-bottom */
+        background: var(--bg-card);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .welcome-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--gradient-primary);
+    }
+
+    .welcome-title {
+        font-size: 2rem; /* Slightly smaller title */
+        margin-bottom: 0.25rem; /* Reduced margin */
+        font-weight: 700;
+        color: var(--text-primary);
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .welcome-subtitle {
+        font-size: 1rem; /* Slightly smaller subtitle */
+        color: var(--text-secondary);
+        font-weight: 400;
+        margin: 0;
+    }
+
+    .edit-options-card {
+        padding: 1.5rem 2.5rem; /* Reduced top/bottom padding */
+        margin-top: 1.5rem; /* Reduced margin-top */
+        background: var(--bg-card);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+    }
+
+    .edit-options-card .info-message {
+        margin-bottom: 1.5rem; /* Reduced margin-bottom */
+        padding: 0.75rem 1rem; /* Reduced padding */
+        font-size: 0.9rem; /* Slightly smaller font */
+        color: var(--text-secondary);
+        padding: 1rem;
+        background-color: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        text-align: center;
+    }
+
+    .edit-options-card .info-message a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .edit-options-card .info-message a:hover {
+        color: var(--primary-dark);
+        text-decoration: underline;
+    }
+
+    .edit-buttons-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Smaller min width for buttons */
+        gap: 1rem; /* Increased gap for better spacing as requested */
+        display: grid;
+    }
+
+    .edit-button {
+        padding: 0.8rem 1.25rem; /* Reduced padding */
+        font-size: 0.9rem; /* Slightly smaller font */
+        width: 100%;
+        border: none;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        transition: var(--transition);
+        font-family: inherit;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .edit-button.warning {
+        background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        color: white;
+    }
+
+    .edit-button.warning:hover {
+        background: linear-gradient(135deg, #d97706 0%, #fcd34d 100%);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .edit-button.danger {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        color: white;
+    }
+
+    .edit-button.danger:hover {
+        background: linear-gradient(135deg, #b91c1c 0%, #f87171 100%);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    /* Modal Styling */
+    .modal-content {
+        background: var(--bg-card);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-xl);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        margin-top: 1.5rem; /* Center modal */
+    }
+
+    .modal-header {
+        padding: 1rem 1.5rem; /* Reduced padding */
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border-color);
+        border-top-left-radius: var(--border-radius-lg);
+        border-top-right-radius: var(--border-radius-lg);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-header .modal-title {
+        font-size: 1.25rem; /* Slightly smaller title */
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    .modal-header .close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .modal-header .close:hover {
+        color: var(--accent-color);
+    }
+
+    .modal-body {
+        padding: 1.5rem; /* Reduced padding */
+    }
+
+    /* Styling for Django form fields within modals */
+    .modal-body form div {
+        margin-bottom: 1rem; /* Reduced margin-bottom for form groups */
+    }
+
+    .modal-body label {
+        font-size: 0.9rem; /* Slightly smaller label font */
+        margin-bottom: 0.4rem; /* Reduced margin */
+        display: block;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .modal-body input[type="text"],
+    .modal-body input[type="number"],
+    .modal-body input[type="email"],
+    .modal-body input[type="password"],
+    .modal-body input[type="tel"], /* Add this line */
+    .modal-body select,
+    .modal-body input[type="date"],
+    .modal-body textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        background-color: var(--bg-secondary);
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        transition: var(--transition);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .modal-body input:focus,
+    .modal-body select:focus,
+    .modal-body input[type="date"]:focus,
+    .modal-body input[type="tel"]:focus, /* Add this line */
+    .modal-body textarea:focus {
+        outline: none;
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        background-color: var(--bg-primary);
+    }
+
+    .modal-body input[disabled],
+    .modal-body input[type="tel"][disabled], /* Add this line */
+    .modal-body select[disabled] {
+        background-color: var(--bg-tertiary);
+        color: var(--text-muted);
+        cursor: not-allowed;
+    }
+
+    .modal-footer {
+        padding: 1rem 1.5rem; /* Reduced padding */
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        border-bottom-left-radius: var(--border-radius-lg);
+        border-bottom-right-radius: var(--border-radius-lg);
+    }
+
+    .modal-footer .btn {
+        padding: 0.6rem 1rem; /* Reduced padding */
+        font-size: 0.8rem; /* Slightly smaller font */
+    }
+
+    .modal-footer .btn-secondary {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+    }
+
+    .modal-footer .btn-secondary:hover {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+    }
+
+    /* ReCAPTCHA styling */
+    .g-recaptcha {
+        margin-top: 1rem; /* Reduced margin */
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .welcome-section {
+            padding: 1.5rem;
+        }
+
+        .welcome-title {
+            font-size: 1.75rem;
+        }
+
+        .edit-options-card {
+            padding: 1.5rem;
+        }
+
+        .edit-buttons-grid {
+            grid-template-columns: 1fr; /* Stack buttons on small screens */
+            gap: 0.6rem;
+        }
+
+        .modal-header, .modal-body, .modal-footer {
+            padding: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .welcome-section {
+            padding: 1rem;
+        }
+
+        .welcome-title {
+            font-size: 1.4rem;
+        }
+
+        .edit-options-card {
+            padding: 1rem;
+        }
+
+        .edit-button {
+            padding: 0.7rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .modal-header, .modal-body, .modal-footer {
+            padding: 0.8rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block bodycontent %}
+<!-- Welcome Section -->
+<div class="welcome-section">
+    <h1 class="welcome-title">Welcome back, {{ user }}!</h1>
+    <p class="welcome-subtitle">Manage your account details</p>
+</div>
+
+<!-- Modals -->
+
+<!-- Edit Basic Details Modal -->
+<!-- Basic Details Modal -->
+<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="basicModalLabel">Edit Basic Details</h5>
+            </div>
+            <form method="post" id="basic-form">
+                {% csrf_token %}
+                <input type="hidden" name="basic-form" value="1">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" class="form-control" name="name" 
+                               value="{{ basic_details.name|default_if_none:'' }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select class="form-control" name="sex" required>
+                            <option value="">Select</option>
+                            <option value="M" {% if basic_details.sex == 'M' %}selected{% endif %}>Male</option>
+                            <option value="F" {% if basic_details.sex == 'F' %}selected{% endif %}>Female</option>
+                            <option value="O" {% if basic_details.sex == 'O' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" class="form-control" name="DOB" 
+                               value="{{ basic_details.DOB|date:'Y-m-d'|default_if_none:'' }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Annual Income (₹)</label>
+                        <input type="number" class="form-control" name="annual_income" 
+                               value="{{ basic_details.annual_income|default_if_none:'' }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="form-control" name="email" 
+                               value="{{ basic_details.email|default_if_none:'' }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Mobile Number</label>
+                        <input type="tel" class="form-control" name="mobile" 
+                               value="{{ basic_details.mobile|default_if_none:'' }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Occupation</label>
+                        <input type="text" class="form-control" name="occupation" 
+                               value="{{ basic_details.occupation|default_if_none:'' }}" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Location Modal -->
+<div class="modal fade" id="locationModal" tabindex="-1" role="dialog" aria-labelledby="locationModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="locationModalLabel">Edit Present Location</h5>
+            </div>
+            <form method="post" id="location-form">
+                {% csrf_token %}
+                <input type="hidden" name="location-form" value="1">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Country</label>
+                        <input type="text" class="form-control" name="country" 
+                               value="{{ location_details.country|default_if_none:'India' }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>State</label>
+                        <input type="text" class="form-control" name="state" 
+                               value="{{ location_details.state|default_if_none:'' }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" class="form-control" name="city" 
+                               value="{{ location_details.city|default_if_none:'' }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Street Address</label>
+                        <input type="text" class="form-control" name="street" 
+                               value="{{ location_details.street|default_if_none:'' }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Pincode</label>
+                        <input type="number" class="form-control" name="pincode" 
+                               value="{{ location_details.pincode|default_if_none:'' }}" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Account Details Modal (Static) -->
+<div class="modal fade" id="accountModal" tabindex="-1" role="dialog" aria-labelledby="accountModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="accountModalLabel">Edit Account Type</h5>
+                
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Account type:</label>
+                    <div class="radio-group">
+                        <input type="radio" id="account_type_savings_modal" name="account_type_modal" checked disabled>
+                        <label for="account_type_savings_modal">Savings</label>
+                    </div>
+                </div>
+                <small class="text-center">(Presently, we only support Savings accounts)</small>
+            </div>
+            <div class="modal-footer">
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <div class="alert {% if message.tags %}alert-{{ message.tags }}"{% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}
+
+
+{% block scriptcontent %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Highlight current page in sidebar
+        const detailsLink = document.getElementById('details');
+        if (detailsLink) {
+            document.querySelectorAll('.nav-card').forEach(link => link.classList.remove('current'));
+            detailsLink.classList.add('current');
+        }
+
+        // Apply consistent styling to Django form inputs within modals
+        const modalForms = document.querySelectorAll('.modal-body input, .modal-body select, .modal-body textarea');
+        modalForms.forEach(input => {
+            // Ensure labels are styled correctly (handled by CSS)
+        });
+
+        // Ensure radio buttons are styled correctly
+        const radioInputs = document.querySelectorAll('.modal-body input[type="radio"]');
+        radioInputs.forEach(radio => {
+            // Custom styling for radio buttons is handled by CSS
+        });
+
+        // --- Dynamic State and City Dropdowns ---
+        const statesAndCities = {
+            "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur"],
+            "Arunachal Pradesh": ["Itanagar", "Naharlagun"],
+            "Assam": ["Guwahati", "Silchar", "Dibrugarh"],
+            "Bihar": ["Patna", "Gaya", "Bhagalpur"],
+            "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur"],
+            "Goa": ["Panaji", "Margao"],
+            "Gujarat": ["Ahmedabad", "Surat", "Vadodara"],
+            "Haryana": ["Faridabad", "Gurugram", "Panipat"],
+            "Himachal Pradesh": ["Shimla", "Dharamshala"],
+            "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad"],
+            "Karnataka": ["Bengaluru", "Mysuru", "Hubballi"],
+            "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode"],
+            "Madhya Pradesh": ["Bhopal", "Indore", "Jabalpur"],
+            "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
+            "Manipur": ["Imphal"],
+            "Meghalaya": ["Shillong"],
+            "Mizoram": ["Aizawl"],
+            "Nagaland": ["Kohima", "Dimapur"],
+            "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela"],
+            "Punjab": ["Ludhiana", "Amritsar", "Jalandhar"],
+            "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur"],
+            "Sikkim": ["Gangtok"],
+            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai"],
+            "Telangana": ["Hyderabad", "Warangal", "Nizamabad"],
+            "Tripura": ["Agartala"],
+            "Uttar Pradesh": ["Lucknow", "Kanpur", "Ghaziabad"],
+            "Uttarakhand": ["Dehradun", "Haridwar", "Nainital"],
+            "West Bengal": ["Kolkata", "Howrah", "Durgapur"]
+        };
+
+        const stateSelect = document.querySelector('#location-form select[name="state"]'); // Adjust name if different in Django form
+        const citySelect = document.querySelector('#location-form select[name="city"]');   // Adjust name if different in Django form
+
+        if (stateSelect && citySelect) {
+            // Populate states initially
+            for (const state in statesAndCities) {
+                const option = document.createElement('option');
+                option.value = state;
+                option.textContent = state;
+                stateSelect.appendChild(option);
+            }
+
+            // Function to populate cities based on selected state
+            const populateCities = () => {
+                const selectedState = stateSelect.value;
+                citySelect.innerHTML = '<option value="">Select City</option>'; // Clear existing options
+                if (selectedState && statesAndCities[selectedState]) {
+                    statesAndCities[selectedState].forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city;
+                        option.textContent = city;
+                        citySelect.appendChild(option);
+                    });
+                }
+            };
+
+            // Event listener for state change
+            stateSelect.addEventListener('change', populateCities);
+
+            // Initial population if a state is pre-selected by Django
+            populateCities();
+        }
+
+        // --- Ensure Django form fields for Sex, Occupation, DOB are styled ---
+        // Assuming Django renders these as <select> for Sex/Occupation and <input type="date"> for DOB
+        // No extra JS needed here, as the CSS rules for 'select' and 'input[type="date"]' handle styling.
+        // Make sure your Django forms are configured to render these HTML types.
+        // Example for Django forms.py:
+        // class BasicDetailsForm(forms.Form):
+        //     sex = forms.ChoiceField(choices=[('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')])
+        //     occupation = forms.ChoiceField(choices=[('Student', 'Student'), ('Employed', 'Employed'), ('Self-Employed', 'Self-Employed'), ('Retired', 'Retired')])
+        //     date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+        //
+        // class LocationForm(forms.Form):
+        //     state = forms.ChoiceField(choices=[(s, s) for s in Object.keys(statesAndCities)]) # Populate dynamically in Django or here
+        //     city = forms.ChoiceField(choices=[]) # Will be populated by JS
+    });
+</script>
+{% endblock %}

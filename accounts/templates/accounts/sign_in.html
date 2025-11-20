@@ -1,0 +1,481 @@
+{% extends 'base_layout.html' %}
+{% block bodycontent %}
+
+{% comment %} {% block stylecontent %} {% endcomment %}
+<style>
+    /* Sign In Page Specific Styles */
+    /* No need to redefine :root or [data-theme="dark"] variables here,
+       as they are already in base_layout.html */
+
+    body {
+        /* Ensure body background is consistent with base_layout's secondary background */
+        background: var(--bg-secondary);
+    }
+
+    .signin-container {
+        min-height: calc(100vh - 160px); /* Adjust height based on header/footer */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+        position: relative;
+    }
+
+    .signin-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(30, 64, 175, 0.03) 0%, rgba(59, 130, 246, 0.03) 100%);
+        z-index: 0;
+    }
+
+    .form-control { /* This class is applied to the <form> tag */
+        background: var(--bg-card);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-lg);
+        padding: 3rem;
+        width: 100%;
+        max-width: 450px;
+        border: 1px solid var(--border-color);
+        position: relative;
+        z-index: 1;
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem; /* Spacing between form elements */
+    }
+
+    .form-control::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--gradient-primary);
+        border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    }
+
+    .form-control:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-xl);
+    }
+
+    .form-control h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        text-align: center;
+        letter-spacing: -0.025em;
+    }
+
+    /* Styling for Django's {{ form }} rendered elements */
+    .form-control p { /* Each field is wrapped in a <p> tag by default */
+        margin-bottom: 1rem; /* Space between form fields */
+        display: flex;
+        flex-direction: column;
+        position: relative; /* For input icons/password toggle */
+    }
+
+    .form-control label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        display: block; /* Ensure label is on its own line */
+    }
+
+    .form-control input[type="text"],
+    .form-control input[type="password"] {
+        padding: 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        font-family: inherit;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        transition: var(--transition);
+        width: 100%;
+        box-sizing: border-box; /* Include padding and border in element's total width and height */
+    }
+
+    .form-control input[type="text"]:focus,
+    .form-control input[type="password"]:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+    }
+
+    .form-control input::placeholder {
+        color: var(--text-muted);
+    }
+
+    /* Input Icons for Django fields */
+    .input-wrapper {
+        position: relative;
+        display: block; /* Ensure it takes full width */
+    }
+
+    .input-wrapper i.input-icon-fa { /* Targeting Font Awesome icons directly inside <p> */
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        z-index: 1;
+    }
+    /* Adjust input padding when icon is present */
+    .input-wrapper input {
+        padding-left: 2.75rem !important; /* Override default padding */
+    }
+
+    /* Password Toggle for Django password field */
+    .password-toggle {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: var(--transition);
+        z-index: 2; /* Ensure it's above the input */
+    }
+
+    .password-toggle:hover {
+        color: var(--primary-color);
+    }
+
+    /* Enhanced Login Button */
+    .btn-danger {
+        background: var(--gradient-primary) !important;
+        color: white !important;
+        border: none !important;
+        padding: 1rem 2rem !important;
+        border-radius: var(--border-radius-md) !important;
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        transition: var(--transition) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+        position: relative !important;
+        overflow: hidden !important;
+        margin-top: 1rem !important;
+    }
+
+    .btn-danger::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-danger:hover::before {
+        left: 100%;
+    }
+
+    .btn-danger:hover {
+        background: var(--primary-dark) !important;
+        transform: translateY(-1px) !important;
+        box-shadow: var(--shadow-md) !important;
+    }
+
+    .btn-danger:active {
+        transform: translateY(0) !important;
+    }
+
+    /* Links Section */
+    .row {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        margin-top: 1.5rem !important;
+        padding-top: 1.5rem !important;
+        border-top: 1px solid var(--border-color) !important;
+    }
+
+    .col {
+        flex: 1 !important;
+    }
+
+    .text-left {
+        text-align: left !important;
+    }
+
+    .text-right {
+        text-align: right !important;
+    }
+
+    .row a {
+        color: var(--primary-color) !important;
+        text-decoration: none !important;
+        font-size: 0.875rem !important;
+        font-weight: 500 !important;
+        transition: var(--transition) !important;
+    }
+
+    .row a:hover {
+        color: var(--primary-dark) !important;
+        text-decoration: underline !important;
+    }
+
+    /* Security Info */
+    .security-info {
+        margin-top: 2rem;
+        padding: 1rem;
+        background: rgba(30, 64, 175, 0.05);
+        border-radius: var(--border-radius);
+        border-left: 4px solid var(--primary-color);
+    }
+
+    .security-info h4 {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .security-info p {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    /* Error Messages */
+    .errorlist {
+        list-style: none;
+        padding: 0;
+        margin: 0.5rem 0;
+    }
+
+    .errorlist li {
+        color: var(--accent-color);
+        font-size: 0.75rem;
+        padding: 0.25rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .errorlist li::before {
+        content: '\f071'; /* Font Awesome exclamation triangle */
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        font-size: 0.75rem;
+    }
+
+    /* Non-field errors */
+    .form-control .errorlist:first-child {
+        background: rgba(220, 38, 38, 0.1);
+        border: 1px solid rgba(220, 38, 38, 0.2);
+        border-radius: var(--border-radius);
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Loading state */
+    .btn-danger.loading {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+
+    .btn-danger.loading::after {
+        content: '';
+        width: 1rem;
+        height: 1rem;
+        border: 2px solid transparent;
+        border-top: 2px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-left: 0.5rem;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Animations */
+    .fade-in {
+        animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .signin-container {
+            padding: 1rem;
+        }
+
+        .form-control {
+            padding: 2rem;
+        }
+
+        .form-control h2 {
+            font-size: 1.75rem;
+        }
+
+        .row {
+            flex-direction: column !important;
+            gap: 1rem !important;
+            text-align: center !important;
+        }
+
+        .text-left,
+        .text-right {
+            text-align: center !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .form-control {
+            padding: 1.5rem;
+        }
+
+        .form-control h2 {
+            font-size: 1.5rem;
+        }
+
+        .form-control input[type="text"],
+        .form-control input[type="password"] {
+            padding: 0.875rem;
+        }
+
+        .btn-danger {
+            padding: 0.875rem 1.5rem !important;
+        }
+    }
+
+    /* Focus styles for accessibility */
+    .form-control input:focus {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+    }
+
+    /* Active navigation styling */
+    #nav-login.active {
+        background: var(--primary-color);
+        color: white;
+    }
+</style>
+
+<div class="signin-container">
+    <div class="container">
+        <form class="form-control fade-in" action="{% url 'accounts:signin' %}" method="post">
+            <div class="security-info">
+                <h4>
+                    <i class="fas fa-shield-alt"></i>
+                    Secure Login
+                </h4>
+                <p>Your connection is encrypted and your data is protected with bank-grade security.</p>
+            </div>
+            {% csrf_token %}
+            <h2>Enter Login Details</h2>
+            
+            <!-- Display authentication errors at the top -->
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-circle"></i> {{ error }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% endif %}
+            
+            <!-- Username field with custom styling -->
+            <p>
+                <label for="id_username">Username</label>
+                <span class="input-wrapper">
+                    <i class="fas fa-user input-icon-fa"></i>
+                    <input type="text" name="username" id="id_username" class="form-control" 
+                           value="{{ form.username.value|default_if_none:'' }}" 
+                           required autofocus>
+                </span>
+                {% if form.username.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.username.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </p>
+            
+            <!-- Password field with custom styling -->
+            <p>
+                <label for="id_password">Password</label>
+                <span class="input-wrapper">
+                    <i class="fas fa-lock input-icon-fa"></i>
+                    <input type="password" name="password" id="id_password" class="form-control" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('id_password', this)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </span>
+                {% if form.password.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.password.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </p>
+            
+            <button type="submit" class="btn btn-danger">
+                <i class="fa fa-sign-in"></i>
+                Login
+            </button>
+            
+            <small class="row">
+                <a href="{% url 'accounts:signup' %}" class="col text-right">Create New Account</a>
+            </small>
+            
+            
+        </form>
+    </div>
+</div>
+
+<script>
+function togglePassword(id, button) {
+    const input = document.getElementById(id);
+    const icon = button.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+</script>
+{% endblock %}

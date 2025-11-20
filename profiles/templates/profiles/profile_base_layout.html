@@ -1,0 +1,1219 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FinEdge Bank | Profile</title>
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Professional CSS Variables - Enhanced Banking Theme */
+      :root {
+        --primary-color: #1e40af;
+        --primary-dark: #1e3a8a;
+        --primary-light: #3b82f6;
+        --secondary-color: #059669;
+        --secondary-dark: #047857;
+        --secondary-light: #10b981;
+        --accent-color: #dc2626;
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --text-muted: #9ca3af;
+        --text-white: #ffffff;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --bg-tertiary: #f1f5f9;
+        --bg-card: #ffffff;
+        --bg-input: #ffffff;
+        --bg-hover: #f1f5f9;
+        --border-color: #e2e8f0;
+        --border-light: #f1f5f9;
+        --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08),
+          0 2px 4px -1px rgba(0, 0, 0, 0.04);
+        --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08),
+          0 4px 6px -2px rgba(0, 0, 0, 0.04);
+        --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.08),
+          0 10px 10px -5px rgba(0, 0, 0, 0.02);
+        --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.12);
+        --border-radius: 12px;
+        --border-radius-md: 16px;
+        --border-radius-lg: 20px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        --gradient-secondary: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        --gradient-subtle: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        --primary-rgb: 30, 64, 175;
+        
+        /* Professional Banking Colors */
+        --banking-blue: #1e40af;
+        --banking-green: #059669;
+        --banking-gold: #d97706;
+        --banking-purple: #7c3aed;
+        --banking-teal: #0d9488;
+        --banking-indigo: #4338ca;
+        --banking-rose: #e11d48;
+        --banking-amber: #f59e0b;
+        --banking-emerald: #10b981;
+        --banking-cyan: #0891b2;
+        --banking-slate: #475569;
+        --banking-orange: #ea580c;
+      }
+
+      /* Dark Mode Variables */
+      [data-theme="dark"] {
+        --text-primary: #f8fafc;
+        --text-secondary: #cbd5e1;
+        --text-muted: #94a3b8;
+        --bg-primary: #0f172a;
+        --bg-secondary: #1e293b;
+        --bg-tertiary: #334155;
+        --bg-card: #1e293b;
+        --bg-input: #2d3748;
+        --bg-hover: #4a5568;
+        --border-color: #334155;
+        --border-light: #475569;
+        --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4),
+          0 2px 4px -1px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.4),
+          0 4px 6px -2px rgba(0, 0, 0, 0.3);
+        --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4),
+          0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        --gradient-subtle: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      }
+
+      /* Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        background: var(--gradient-subtle);
+        color: var(--text-primary);
+        line-height: 1.6;
+        transition: var(--transition);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Enhanced Header with Glass Effect */
+      .header {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-primary);
+        padding: 1.25rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: var(--shadow-md);
+      }
+
+      [data-theme="dark"] .header {
+        background: rgba(30, 41, 59, 0.95);
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-height: 4rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: var(--primary-color);
+        text-decoration: none;
+        position: relative;
+      }
+
+      .logo::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 3px;
+        background: var(--gradient-primary);
+        border-radius: 2px;
+        transition: var(--transition);
+      }
+
+      .logo:hover::after {
+        width: 100%;
+      }
+
+      .logo i {
+        font-size: 2rem;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+      }
+
+      .theme-toggle {
+        background: var(--bg-card);
+        border: 2px solid var(--border-color);
+        color: var(--text-secondary);
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 1rem;
+        border-radius: 50%;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        box-shadow: var(--shadow);
+      }
+
+      .theme-toggle:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: rotate(180deg) scale(1.05);
+        border-color: var(--primary-color);
+      }
+
+      /* Enhanced Buttons with Modern Look */
+      .btn {
+        padding: 1rem 1.75rem;
+        border: none;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        transition: var(--transition);
+        font-size: 0.9rem;
+        font-family: inherit;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: var(--transition);
+      }
+
+      .btn:hover::before {
+        left: 100%;
+      }
+
+      .btn-primary {
+        background: var(--gradient-primary);
+        color: white;
+        box-shadow: var(--shadow-md);
+        border: 2px solid transparent;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+        text-decoration: none;
+        color: white;
+      }
+
+      .btn-white {
+        background: var(--bg-card);
+        color: var(--text-primary);
+        border: 2px solid var(--border-color);
+        box-shadow: var(--shadow);
+      }
+
+      .btn-white:hover {
+        background: var(--bg-secondary);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        text-decoration: none;
+        color: var(--text-primary);
+      }
+
+      .btn-danger {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        color: white;
+        box-shadow: var(--shadow-md);
+        border: 2px solid transparent;
+      }
+
+      .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+        text-decoration: none;
+        color: white;
+      }
+
+      /* Modern Layout with Better Spacing */
+      .main-container {
+        display: flex;
+        flex: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+        gap: 2.5rem;
+        padding: 2.5rem 2rem;
+      }
+
+      /* Enhanced Sidebar with Modern Cards */
+      .sidebar {
+        width: 320px;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        height: fit-content;
+        position: sticky;
+        top: 8rem;
+      }
+
+      .sidebar-header {
+        background: var(--bg-card);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .sidebar-header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--gradient-primary);
+      }
+
+      .sidebar-logo img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-bottom: 1rem;
+        border: 4px solid var(--border-color);
+        transition: var(--transition);
+      }
+
+      .sidebar-logo img:hover {
+        transform: scale(1.05);
+        border-color: var(--primary-color);
+      }
+
+      .sidebar-title {
+        color: var(--primary-color);
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin: 0;
+      }
+
+      .sidebar-nav {
+        background: var(--bg-card);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+        padding: 1.5rem;
+      }
+
+      .nav-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      /* Enhanced Professional Navigation Cards */
+      .nav-card {
+        background: var(--bg-card);
+        border: 2px solid var(--border-color);
+        border-radius: var(--border-radius);
+        padding: 1.25rem;
+        text-decoration: none;
+        color: var(--text-primary);
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.75rem;
+        position: relative;
+        overflow: hidden;
+        min-height: 120px;
+        box-shadow: var(--shadow);
+      }
+
+      /* Professional Card Outline Effects */
+      .nav-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--gradient-primary);
+        transform: scaleX(0);
+        transition: var(--transition);
+        transform-origin: left;
+      }
+
+      .nav-card::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        transition: var(--transition);
+      }
+
+      .nav-card:hover::before {
+        transform: scaleX(1);
+      }
+
+      .nav-card:hover::after {
+        left: 100%;
+      }
+
+      .nav-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--primary-light);
+        text-decoration: none;
+        color: var(--text-primary);
+      }
+
+      .nav-card-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--gradient-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        box-shadow: var(--shadow);
+      }
+
+      .nav-card:hover .nav-card-icon {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: var(--shadow-md);
+      }
+
+      .nav-card-icon i {
+        font-size: 1.25rem;
+        color: white;
+      }
+
+      .nav-card-content h4 {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: 0;
+        color: var(--text-primary);
+      }
+
+      .nav-card-content p {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin: 0;
+        line-height: 1.3;
+      }
+
+      .nav-card.current {
+        background: var(--gradient-primary);
+        color: white;
+        border-color: var(--primary-color);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .nav-card.current .nav-card-icon {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .nav-card.current .nav-card-content h4,
+      .nav-card.current .nav-card-content p {
+        color: white;
+      }
+
+      .nav-card.current:hover {
+        color: white;
+      }
+
+      /* Professional Banking Card Styles */
+      
+      /* Account Status - Banking Blue */
+      .nav-card.banking-blue {
+        border-color: var(--banking-blue);
+      }
+      .nav-card.banking-blue::before {
+        background: linear-gradient(135deg, var(--banking-blue) 0%, #3b82f6 100%);
+      }
+      .nav-card.banking-blue .nav-card-icon {
+        background: linear-gradient(135deg, var(--banking-blue) 0%, #3b82f6 100%);
+      }
+      .nav-card.banking-blue:hover {
+        border-color: var(--banking-blue);
+        background: rgba(30, 64, 175, 0.05);
+      }
+
+      /* Money Transfer - Banking Green */
+      .nav-card.banking-green {
+        border-color: var(--banking-green);
+      }
+      .nav-card.banking-green::before {
+        background: linear-gradient(135deg, var(--banking-green) 0%, #10b981 100%);
+      }
+      .nav-card.banking-green .nav-card-icon {
+        background: linear-gradient(135deg, var(--banking-green) 0%, #10b981 100%);
+      }
+      .nav-card.banking-green:hover {
+        border-color: var(--banking-green);
+        background: rgba(5, 150, 105, 0.05);
+      }
+
+      /* Loan Application - Banking Gold */
+      .nav-card.banking-gold {
+        border-color: var(--banking-gold);
+      }
+      .nav-card.banking-gold::before {
+        background: linear-gradient(135deg, var(--banking-gold) 0%, #fbbf24 100%);
+      }
+      .nav-card.banking-gold .nav-card-icon {
+        background: linear-gradient(135deg, var(--banking-gold) 0%, #fbbf24 100%);
+      }
+      .nav-card.banking-gold:hover {
+        border-color: var(--banking-gold);
+        background: rgba(217, 119, 6, 0.05);
+      }
+
+      /* eWallet - Banking Teal */
+      .nav-card.banking-teal {
+        border-color: var(--banking-teal);
+      }
+      .nav-card.banking-teal::before {
+        background: linear-gradient(135deg, var(--banking-teal) 0%, #14b8a6 100%);
+      }
+      .nav-card.banking-teal .nav-card-icon {
+        background: linear-gradient(135deg, var(--banking-teal) 0%, #14b8a6 100%);
+      }
+      .nav-card.banking-teal:hover {
+        border-color: var(--banking-teal);
+        background: rgba(13, 148, 136, 0.05);
+      }
+
+      /* Online Payment - Banking Purple */
+      .nav-card.banking-purple {
+        border-color: var(--banking-purple);
+      }
+      .nav-card.banking-purple::before {
+        background: linear-gradient(135deg, var(--banking-purple) 0%, #a78bfa 100%);
+      }
+      .nav-card.banking-purple .nav-card-icon {
+        background: linear-gradient(135deg, var(--banking-purple) 0%, #a78bfa 100%);
+      }
+      .nav-card.banking-purple:hover {
+        border-color: var(--banking-purple);
+        background: rgba(124, 58, 237, 0.05);
+      }
+
+      /* Debit Cards - Banking Indigo */
+      .nav-card.banking-indigo {
+        border-color: var(--banking-indigo);
+      }
+      .nav-card.banking-indigo::before {
+        background: linear-gradient(135deg, var(--banking-indigo) 0%, #6366f1 100%);
+      }
+      .nav-card.banking-indigo .nav-card-icon {
+        background: linear-gradient(135deg, var(--banking-indigo) 0%, #6366f1 100%);
+      }
+      .nav-card.banking-indigo:hover {
+        border-color: var(--banking-indigo);
+        background: rgba(67, 56, 202, 0.05);
+      }
+
+      /* Credit Cards - Banking Rose */
+      .nav-card.banking-rose {
+        border-color: var(--banking-rose);
+      }
+      .nav-card.banking-rose::before {
+        background: linear-gradient(135deg, var(--banking-rose) 0%, #f43f5e 100%);
+      }
+      .nav-card.banking-rose .nav-card-icon {
+        background: linear-gradient(135deg, var(--banking-rose) 0%, #f43f5e 100%);
+      }
+      .nav-card.banking-rose:hover {
+        border-color: var(--banking-rose);
+        background: rgba(225, 29, 72, 0.05);
+      }
+
+      /* Statement - Banking Emerald */
+      .nav-card.banking-emerald {
+        border-color: var(--banking-emerald);
+      }
+      .nav-card.banking-emerald::before {
+        background: linear-gradient(135deg, var(--banking-emerald) 0%, #34d399 100%);
+      }
+      .nav-card.banking-emerald .nav-card-icon {
+        background: linear-gradient(135deg, var(--banking-emerald) 0%, #34d399 100%);
+      }
+      .nav-card.banking-emerald:hover {
+        border-color: var(--banking-emerald);
+        background: rgba(16, 185, 129, 0.05);
+      }
+
+      /* Investment - Banking Cyan */
+      .nav-card.banking-cyan {
+        border-color: var(--banking-cyan);
+      }
+      .nav-card.banking-cyan::before {
+        background: linear-gradient(135deg, var(--banking-cyan) 0%, #06b6d4 100%);
+      }
+      .nav-card.banking-cyan .nav-card-icon {
+        background: linear-gradient(135deg, var(--banking-cyan) 0%, #06b6d4 100%);
+      }
+      .nav-card.banking-cyan:hover {
+        border-color: var(--banking-cyan);
+        background: rgba(8, 145, 178, 0.05);
+      }
+
+      /* Settings - Banking Slate */
+      .nav-card.banking-slate {
+        border-color: var(--banking-slate);
+      }
+      .nav-card.banking-slate::before {
+        background: linear-gradient(135deg, var(--banking-slate) 0%, #64748b 100%);
+      }
+      .nav-card.banking-slate .nav-card-icon {
+        background: linear-gradient(135deg, var(--banking-slate) 0%, #64748b 100%);
+      }
+      .nav-card.banking-slate:hover {
+        border-color: var(--banking-slate);
+        background: rgba(71, 85, 105, 0.05);
+      }
+
+      /* Edit Details - Banking Amber (Warning) */
+      .nav-card.banking-amber {
+        border-color: var(--banking-amber);
+      }
+      .nav-card.banking-amber::before {
+        background: linear-gradient(135deg, var(--banking-amber) 0%, #fbbf24 100%);
+      }
+      .nav-card.banking-amber .nav-card-icon {
+        background: linear-gradient(135deg, var(--banking-amber) 0%, #fbbf24 100%);
+      }
+      .nav-card.banking-amber:hover {
+        border-color: var(--banking-amber);
+        background: rgba(245, 158, 11, 0.05);
+      }
+
+      /* Delete Account - Banking Orange (Danger) */
+      .nav-card.banking-orange {
+        border-color: var(--banking-orange);
+      }
+      .nav-card.banking-orange::before {
+        background: linear-gradient(135deg, var(--banking-orange) 0%, #f97316 100%);
+      }
+      .nav-card.banking-orange .nav-card-icon {
+        background: linear-gradient(135deg, var(--banking-orange) 0%, #f97316 100%);
+      }
+      .nav-card.banking-orange:hover {
+        border-color: var(--banking-orange);
+        background: rgba(234, 88, 12, 0.05);
+      }
+
+      /* Dark theme adjustments for professional cards */
+      [data-theme="dark"] .nav-card:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      [data-theme="dark"] .nav-card.banking-blue:hover {
+        background: rgba(30, 64, 175, 0.1);
+      }
+
+      [data-theme="dark"] .nav-card.banking-green:hover {
+        background: rgba(5, 150, 105, 0.1);
+      }
+
+      [data-theme="dark"] .nav-card.banking-gold:hover {
+        background: rgba(217, 119, 6, 0.1);
+      }
+
+      [data-theme="dark"] .nav-card.banking-teal:hover {
+        background: rgba(13, 148, 136, 0.1);
+      }
+
+      [data-theme="dark"] .nav-card.banking-purple:hover {
+        background: rgba(124, 58, 237, 0.1);
+      }
+
+      [data-theme="dark"] .nav-card.banking-indigo:hover {
+        background: rgba(67, 56, 202, 0.1);
+      }
+
+      [data-theme="dark"] .nav-card.banking-rose:hover {
+        background: rgba(225, 29, 72, 0.1);
+      }
+
+      [data-theme="dark"] .nav-card.banking-emerald:hover {
+        background: rgba(16, 185, 129, 0.1);
+      }
+
+      [data-theme="dark"] .nav-card.banking-cyan:hover {
+        background: rgba(8, 145, 178, 0.1);
+      }
+
+      [data-theme="dark"] .nav-card.banking-slate:hover {
+        background: rgba(71, 85, 105, 0.1);
+      }
+
+      [data-theme="dark"] .nav-card.banking-amber:hover {
+        background: rgba(245, 158, 11, 0.1);
+      }
+
+      [data-theme="dark"] .nav-card.banking-orange:hover {
+        background: rgba(234, 88, 12, 0.1);
+      }
+
+      /* Responsive adjustments for nav-grid */
+      @media (max-width: 768px) {
+        .nav-grid {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 0.75rem;
+        }
+        .nav-card {
+          padding: 1rem;
+          min-height: 100px;
+        }
+        .nav-card-icon {
+          width: 40px;
+          height: 40px;
+        }
+        .nav-card-icon i {
+          font-size: 1.1rem;
+        }
+        .nav-card-content h4 {
+          font-size: 0.8rem;
+        }
+        .nav-card-content p {
+          font-size: 0.7rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .nav-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      /* Enhanced Content Area */
+      .content {
+        flex: 1;
+        background: var(--bg-card);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+        padding: 2.5rem;
+        min-height: 700px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .content::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--gradient-secondary);
+      }
+
+      /* Enhanced Footer */
+      .footer {
+        background: var(--bg-card);
+        border-top: 1px solid var(--border-color);
+        color: var(--text-primary);
+        padding: 2.5rem 2rem;
+        text-align: center;
+        margin-top: 2rem;
+        box-shadow: var(--shadow-md);
+      }
+
+      .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .footer p {
+        margin-bottom: 0.75rem;
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+      }
+
+      .footer a {
+        color: var(--primary-color);
+        text-decoration: none;
+        transition: var(--transition);
+        font-weight: 600;
+      }
+
+      .footer a:hover {
+        color: var(--primary-dark);
+        text-decoration: underline;
+      }
+
+      .footer i {
+        margin: 0 0.5rem;
+      }
+
+      .heart {
+        color: var(--secondary-color);
+        animation: heartbeat 2s ease-in-out infinite;
+      }
+
+      @keyframes heartbeat {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+
+      /* Enhanced Responsive Design */
+      @media (max-width: 1024px) {
+        .main-container {
+          padding: 2rem 1.5rem;
+          gap: 2rem;
+        }
+        .sidebar {
+          width: 280px;
+        }
+        .header-content {
+          padding: 0 1.5rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .header-content {
+          flex-direction: column;
+          gap: 1.5rem;
+          min-height: auto;
+          padding: 1.5rem 1rem;
+        }
+        .header-actions {
+          width: 100%;
+          justify-content: center;
+        }
+        .logo {
+          font-size: 1.5rem;
+        }
+        .main-container {
+          flex-direction: column;
+          padding: 1.5rem 1rem;
+          gap: 1.5rem;
+        }
+        .sidebar {
+          width: 100%;
+          position: static;
+        }
+        .sidebar-nav {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 0.75rem;
+        }
+        .content {
+          padding: 2rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .sidebar-nav {
+          grid-template-columns: 1fr;
+        }
+        .sidebar-link {
+          padding: 1rem;
+          font-size: 0.9rem;
+        }
+        .content {
+          padding: 1.5rem;
+        }
+        .btn {
+          padding: 0.875rem 1.5rem;
+          font-size: 0.875rem;
+        }
+        .header-content {
+          padding: 1rem;
+        }
+      }
+
+      /* Enhanced Focus and Accessibility */
+      .btn:focus,
+      .theme-toggle:focus,
+      .nav-card:focus {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 3px;
+      }
+
+      /* Smooth Theme Transition */
+      body.theme-transitioning * {
+        transition: none !important;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--gradient-primary);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-dark);
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Loading states */
+      .loading {
+        opacity: 0.7;
+        pointer-events: none;
+      }
+    </style>
+    {% block headcontent %} {% endblock %}
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <a href="{% url 'home' %}" class="logo">
+          <i class="fas fa-university"></i>
+          FinEdge Bank
+        </a>
+        <div class="header-actions">
+          <button
+            class="theme-toggle"
+            onclick="toggleTheme()"
+            aria-label="Toggle theme"
+          >
+            <i class="fas fa-moon"></i>
+          </button>
+          <a href="{% url 'accounts:logout' %}" class="btn btn-danger">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <img src="{% static 'images/logo.jpg' %}" alt="FinEdge Bank Logo" />
+          </div>
+          <h3 class="sidebar-title">Account Portal</h3>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-grid">
+            <!-- Account Status - Banking Blue -->
+            <a
+              href="{% url 'profiles:account_status' %}"
+              class="nav-card banking-blue"
+              id="status"
+            >
+              <div class="nav-card-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <div class="nav-card-content">
+                <h4>Account Status</h4>
+                <p>View balance & activity</p>
+              </div>
+            </a>
+
+            <!-- Edit Details - Banking Amber (Warning) -->
+            <a
+              href="{% url 'profiles:edit_details' %}"
+              class="nav-card banking-amber"
+              id="details"
+            >
+              <div class="nav-card-icon">
+                <i class="fas fa-edit"></i>
+              </div>
+              <div class="nav-card-content">
+                <h4>Edit Details</h4>
+                <p>Update account info</p>
+              </div>
+            </a>
+
+            <!-- Money Transfer - Banking Green -->
+            <a
+              href="{% url 'profiles:money_transfer' %}"
+              class="nav-card banking-green"
+              id="transfer"
+            >
+              <div class="nav-card-icon">
+                <i class="fas fa-exchange-alt"></i>
+              </div>
+              <div class="nav-card-content">
+                <h4>Money Transfer</h4>
+                <p>Send & receive funds</p>
+              </div>
+            </a>
+
+            <!-- Online Payment - Banking Purple -->
+            <a
+              href="{% url 'profiles:online_pay' %}"
+              class="nav-card banking-purple"
+              id="online"
+            >
+              <div class="nav-card-icon">
+                <i class="fas fa-credit-card"></i>
+              </div>
+              <div class="nav-card-content">
+                <h4>Online Payment</h4>
+                <p>Pay bills & services</p>
+              </div>
+            </a>
+
+            <!-- Loan Application - Banking Gold -->
+            <a href="{% url 'profiles:loan_app' %}" class="nav-card banking-gold" id="loan">
+              <div class="nav-card-icon">
+                <i class="fas fa-hand-holding-usd"></i>
+              </div>
+              <div class="nav-card-content">
+                <h4>Loan Application</h4>
+                <p>Apply for loans</p>
+              </div>
+            </a>
+
+            <!-- eWallet - Banking Teal -->
+            <a
+              href="{% url 'profiles:ewallet' %}"
+              class="nav-card banking-teal"
+              id="ewallet"
+            >
+              <div class="nav-card-icon">
+                <i class="fas fa-wallet"></i>
+              </div>
+              <div class="nav-card-content">
+                <h4>eWallet™</h4>
+                <p>Digital wallet services</p>
+              </div>
+            </a>
+
+            <!-- Debit Cards - Banking Indigo -->
+            <a
+              href="{% url 'profiles:debit_cards' %}"
+              class="nav-card banking-indigo"
+              id="debit"
+            >
+              <div class="nav-card-icon">
+                <i class="fas fa-credit-card"></i>
+              </div>
+              <div class="nav-card-content">
+                <h4>Debit Cards</h4>
+                <p>Manage debit cards</p>
+              </div>
+            </a>
+
+            <!-- Credit Cards - Banking Rose -->
+            <a
+              href="{% url 'profiles:credit_cards' %}"
+              class="nav-card banking-rose"
+              id="credit"
+            >
+              <div class="nav-card-icon">
+                <i class="fas fa-cc-visa"></i>
+              </div>
+              <div class="nav-card-content">
+                <h4>Credit Cards</h4>
+                <p>Manage credit cards</p>
+              </div>
+            </a>
+
+            <!-- Investment - Banking Cyan -->
+            <a
+              href="{% url 'profiles:investment' %}"
+              class="nav-card banking-cyan"
+              id="investment"
+            >
+              <div class="nav-card-icon">
+                <i class="fas fa-chart-pie"></i>
+              </div>
+              <div class="nav-card-content">
+                <h4>Investment</h4>
+                <p>Portfolio & trading</p>
+              </div>
+            </a>
+
+            <!-- Settings - Banking Slate -->
+            <a
+              href="{% url 'profiles:settings' %}"
+              class="nav-card banking-slate"
+              id="settings"
+            >
+              <div class="nav-card-icon">
+                <i class="fas fa-cog"></i>
+              </div>
+              <div class="nav-card-content">
+                <h4>Account Settings</h4>
+                <p>Manage preferences</p>
+              </div>
+            </a>
+
+            <!-- Delete Account - Banking Orange (Danger) -->
+            <a
+              href="{% url 'profiles:delete_account' %}"
+              class="nav-card banking-orange"
+              id="delete"
+            >
+              <div class="nav-card-icon">
+                <i class="fas fa-trash-alt"></i>
+              </div>
+              <div class="nav-card-content">
+                <h4>Delete Account</h4>
+                <p>Permanently remove</p>
+              </div>
+            </a>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Content Area -->
+      <main class="content">{% block bodycontent %} {% endblock %}</main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <p>
+          &copy; 2025 FinEdge Bank. All rights reserved. | Licensed by RBI |
+          DICGC Insured
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // Professional Theme Toggle
+      let currentTheme = "light";
+
+      function toggleTheme() {
+        document.body.classList.add("theme-transitioning");
+        currentTheme = currentTheme === "light" ? "dark" : "light";
+        document.body.setAttribute("data-theme", currentTheme);
+
+        const themeIcon = document.querySelector(".theme-toggle i");
+        themeIcon.className =
+          currentTheme === "light" ? "fas fa-moon" : "fas fa-sun";
+
+        localStorage.setItem("theme", currentTheme);
+
+        setTimeout(() => {
+          document.body.classList.remove("theme-transitioning");
+        }, 200);
+      }
+
+      // Load saved theme
+      function loadTheme() {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          currentTheme = savedTheme;
+          document.body.setAttribute("data-theme", currentTheme);
+          const themeIcon = document.querySelector(".theme-toggle i");
+          themeIcon.className =
+            currentTheme === "light" ? "fas fa-moon" : "fas fa-sun";
+        }
+      }
+
+      // Highlight current page in sidebar
+      function highlightCurrentPage() {
+        const currentPath = window.location.pathname;
+        const navCards = document.querySelectorAll(".nav-card");
+        navCards.forEach((card) => {
+          card.classList.remove("current");
+          if (card.getAttribute("href") === currentPath) {
+            card.classList.add("current");
+          }
+        });
+      }
+
+      // Initialize everything when DOM is loaded
+      document.addEventListener("DOMContentLoaded", function () {
+        loadTheme();
+        highlightCurrentPage();
+      });
+
+      // Keyboard navigation support
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Tab") {
+          document.body.classList.add("keyboard-navigation");
+        }
+      });
+
+      document.addEventListener("mousedown", function () {
+        document.body.classList.remove("keyboard-navigation");
+      });
+    </script>
+    {% block scriptcontent %} {% endblock %}
+  </body>
+</html>

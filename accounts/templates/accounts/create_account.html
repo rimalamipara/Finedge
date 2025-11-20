@@ -1,0 +1,475 @@
+{% extends 'base_layout.html' %}
+
+{% block bodycontent %}
+{% comment %} {% block stylecontent %} {% endcomment %}
+<style>
+    /* Sign Up Page Specific Styles */
+    /* Inheriting all base variables from base_layout.html */
+    
+    body {
+        background: var(--bg-secondary);
+    }
+
+    .signup-container {
+        min-height: calc(100vh - 160px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+        position: relative;
+    }
+
+    .signup-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(30, 64, 175, 0.03) 0%, rgba(59, 130, 246, 0.03) 100%);
+        z-index: 0;
+    }
+
+    .form-control-wrapper {
+        background: var(--bg-card);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-lg);
+        padding: 3rem;
+        width: 100%;
+        max-width: 500px;
+        border: 1px solid var(--border-color);
+        position: relative;
+        z-index: 1;
+        transition: var(--transition);
+    }
+
+    .form-control-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--gradient-primary);
+        border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    }
+
+    .form-control-wrapper:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-xl);
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        text-align: center;
+        letter-spacing: -0.025em;
+        border: none;
+    }
+
+    .page-subtitle {
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        margin-bottom: 2rem;
+        font-style: italic;
+    }
+
+    .form-section {
+        margin-bottom: 2rem;
+    }
+
+    .form-section h4 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Django form field styling */
+    .form-section p {
+        margin-bottom: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .form-section label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-section input[type="text"],
+    .form-section input[type="password"],
+    .form-section input[type="email"] {
+        padding: 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        font-family: inherit;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        transition: var(--transition);
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .form-section input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+    }
+
+    .form-section input::placeholder {
+        color: var(--text-muted);
+    }
+
+    /* Input wrapper for icons */
+    .input-wrapper {
+        position: relative;
+        display: block;
+    }
+
+    .input-wrapper i.input-icon-fa {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        z-index: 1;
+    }
+
+    .input-wrapper input {
+        padding-left: 2.75rem !important;
+    }
+
+    /* Password toggle */
+    .password-toggle {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: var(--transition);
+        z-index: 2;
+    }
+
+    .password-toggle:hover {
+        color: var(--primary-color);
+    }
+
+    /* Terms and conditions section */
+    .terms-section {
+        margin: 2rem 0;
+        padding: 1.5rem;
+        background: rgba(30, 64, 175, 0.05);
+        border-radius: var(--border-radius);
+        border-left: 4px solid var(--primary-color);
+    }
+
+    .terms-checkbox {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin: 0;
+    }
+
+    .terms-checkbox input[type="checkbox"] {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin: 0;
+        cursor: pointer;
+        accent-color: var(--primary-color);
+        flex-shrink: 0;
+        margin-top: 0.125rem;
+    }
+
+    .terms-text {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    .terms-text a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition);
+    }
+
+    .terms-text a:hover {
+        color: var(--primary-dark);
+        text-decoration: underline;
+    }
+
+    /* Submit button */
+    .btn-primary-custom {
+        background: var(--gradient-primary) !important;
+        color: white !important;
+        border: none !important;
+        padding: 1rem 2rem !important;
+        border-radius: var(--border-radius-md) !important;
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        transition: var(--transition) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+        position: relative !important;
+        overflow: hidden !important;
+        margin-top: 1rem !important;
+    }
+
+    .btn-primary-custom::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-primary-custom:hover::before {
+        left: 100%;
+    }
+
+    .btn-primary-custom:hover {
+        background: var(--primary-dark) !important;
+        transform: translateY(-1px) !important;
+        box-shadow: var(--shadow-md) !important;
+    }
+
+    .btn-primary-custom:active {
+        transform: translateY(0) !important;
+    }
+
+    /* Error messages */
+    .errorlist {
+        list-style: none;
+        padding: 0;
+        margin: 0.5rem 0;
+    }
+
+    .errorlist li {
+        color: var(--accent-color);
+        font-size: 0.75rem;
+        padding: 0.25rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .errorlist li::before {
+        content: '\f071';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        font-size: 0.75rem;
+    }
+
+
+    /* Login link */
+    .login-link {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .login-link a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: var(--transition);
+    }
+
+    .login-link a:hover {
+        color: var(--primary-dark);
+        text-decoration: underline;
+    }
+
+    /* Animations */
+    .fade-in {
+        animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .signup-container {
+            padding: 1rem;
+        }
+        
+        .form-control-wrapper {
+            padding: 2rem;
+        }
+        
+        .page-title {
+            font-size: 1.75rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .form-control-wrapper {
+            padding: 1.5rem;
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+        }
+        
+        .form-section input {
+            padding: 0.875rem;
+        }
+        
+        .btn-primary-custom {
+            padding: 0.875rem 1.5rem !important;
+        }
+    }
+
+    /* Active navigation styling */
+    #nav-create.active {
+        background: var(--primary-color);
+        color: white;
+    }
+</style>
+
+<div class="signup-container">
+    <div class="container">
+        <div class="form-control-wrapper fade-in">
+            <h2 class="page-title">Create New Account</h2>
+            <h6 class="page-subtitle">(All details are mandatory)</h6>
+            
+            <form action="/accounts/register/" method="post">
+                {% csrf_token %}
+                
+                <section class="form-section">
+                    <h4>
+                        <i class="fas fa-user-plus"></i>
+                        Enter basic details
+                    </h4>
+                    
+                    <!-- Custom rendering of Django form fields -->
+                    {% for field in form %}
+                        <p>
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            <span class="input-wrapper">
+                                {% if field.name == 'username' %}
+                                    <i class="fas fa-user input-icon-fa"></i>
+                                {% elif 'password' in field.name %}
+                                    <i class="fas fa-lock input-icon-fa"></i>
+                                {% else %}
+                                    <i class="fas fa-edit input-icon-fa"></i>
+                                {% endif %}
+                                
+                                {{ field }}
+                                
+                                {% if 'password' in field.name %}
+                                    <button type="button" class="password-toggle" onclick="togglePassword('{{ field.id_for_label }}', this)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                {% endif %}
+                            </span>
+                            
+                            {% if field.errors %}
+                                <ul class="errorlist">
+                                    {% for error in field.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </p>
+                    {% endfor %}
+                </section>
+
+                <!-- Terms and Conditions -->
+                <section class="terms-section">
+                    <div class="terms-checkbox">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms" class="terms-text">
+                            By clicking "Create account" you agree to our 
+                            <a href="#">Terms and Conditions</a>.
+                        </label>
+                    </div>
+                </section>
+
+                <input type="submit" class="btn-primary-custom" value="Create account" name="submit" />
+            </form>
+            
+            <div class="login-link">
+                <p>Already have an account? <a href="{% url 'accounts:signin' %}">Sign in here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword(id, button) {
+    const input = document.getElementById(id);
+    const icon = button.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+
+// Enhanced JavaScript for form styling
+document.addEventListener('DOMContentLoaded', function() {
+    // Remove active class and add to create nav
+    const activeElements = document.querySelectorAll('.active');
+    activeElements.forEach(el => el.classList.remove('active'));
+    
+    const navCreate = document.getElementById('nav-create');
+    if (navCreate) {
+        navCreate.classList.add('active');
+    }
+    
+    // Add form-control class to inputs
+    const inputs = document.querySelectorAll('input[type="text"], input[type="password"], input[type="email"]');
+    inputs.forEach(input => {
+        input.classList.add('form-control');
+    });
+    
+    // Style error messages
+    const errorItems = document.querySelectorAll('form ul li');
+    errorItems.forEach(item => {
+        item.classList.add('btn', 'btn-danger');
+    });
+});
+</script>
+
+{% endblock %}

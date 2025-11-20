@@ -1,0 +1,79 @@
+{% extends 'base_layout.html' %}
+
+
+{% block bodycontent %}    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1 class="hero-title fade-in">Your Financial Journey, Elevated.</h1>
+            <p class="hero-subtitle fade-in">
+                Experience modern banking with FinEdge. Secure transactions, personalized loans, and seamless digital payments
+                are just a click away. Join thousands of satisfied customers who trust us with their financial future.
+            </p>
+            <div class="hero-actions fade-in">
+                <a href="{% url 'accounts:signin' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-arrow-right"></i>
+                    Get Started Today
+                </a>
+                <a href="#" class="btn btn-outline btn-lg">
+                    <i class="fas fa-info-circle"></i>
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title fade-in">Why Choose FinEdge Bank?</h2>
+            <div class="grid grid-3">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Bank-Grade Security</h3>
+                    <p>Your financial saf
+                        +
+                        
+                        ety is our top priority with advanced encryption, multi-factor authentication, and 24/7 fraud monitoring to protect your assets.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile Banking</h3>
+                    <p>Manage your accounts, transfer funds, pay bills, and deposit checks on the go with our secure mobile banking application.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <h3>Loan Solutions</h3>
+                    <p>Get competitive loan options for your home, car, education, and personal needs with quick approval and flexible terms.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h3>Cards & Rewards</h3>
+                    <p>Access credit and debit cards with rewards programs, cashback offers, and benefits designed for your financial goals.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3>Digital Payments</h3>
+                    <p>Enjoy instant payments with our integrated digital wallet and UPI services for seamless money management.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3>Money Transfers</h3>
+                    <p>Send money instantly via IMPS, NEFT, and RTGS with competitive rates and secure international transfer options.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

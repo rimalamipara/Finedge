@@ -1,0 +1,233 @@
+{% extends 'profiles/profile_base_layout.html' %}
+
+{% block headcontent %}
+<style>
+    /* Account Settings Specific Styles */
+    .welcome-section {
+        background: var(--bg-card);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .welcome-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--gradient-primary);
+    }
+
+    .welcome-title {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .welcome-subtitle {
+        font-size: 1.125rem;
+        color: var(--text-secondary);
+        font-weight: 400;
+        margin: 0;
+    }
+
+    .settings-card {
+        background: var(--bg-card);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+        padding: 2.5rem;
+        margin-top: 2rem;
+    }
+
+    .settings-card h3 {
+        color: var(--text-primary);
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .form-group input[type="text"][disabled] {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        background-color: var(--bg-tertiary); /* Lighter background for disabled */
+        color: var(--text-muted); /* Muted text for disabled */
+        font-size: 1rem;
+        cursor: not-allowed;
+        box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .radio-group {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+    }
+
+    .radio-group input[type="radio"] {
+        /* Hide default radio button */
+        appearance: none;
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        border: 2px solid var(--border-color);
+        border-radius: 50%;
+        background-color: var(--bg-secondary);
+        cursor: pointer;
+        position: relative;
+        transition: var(--transition);
+    }
+
+    .radio-group input[type="radio"]:checked {
+        border-color: var(--primary-color);
+        background-color: var(--primary-color);
+    }
+
+    .radio-group input[type="radio"]:checked::before {
+        content: '';
+        display: block;
+        width: 8px;
+        height: 8px;
+        background-color: var(--text-white);
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .radio-group label {
+        margin-bottom: 0; /* Override default label margin */
+        cursor: pointer;
+        font-weight: 500;
+        color: var(--text-primary);
+    }
+
+    .info-message {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        margin-top: 2rem;
+        padding: 1rem;
+        background-color: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        text-align: center;
+    }
+
+    .info-message a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .info-message a:hover {
+        color: var(--primary-dark);
+        text-decoration: underline;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .welcome-section {
+            padding: 2rem;
+        }
+
+        .welcome-title {
+            font-size: 1.875rem;
+        }
+
+        .settings-card {
+            padding: 2rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .welcome-section {
+            padding: 1.5rem;
+        }
+
+        .welcome-title {
+            font-size: 1.5rem;
+        }
+
+        .settings-card {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block bodycontent %}
+<!-- Welcome Section -->
+<div class="welcome-section">
+    <h1 class="welcome-title">Welcome back, {{ user }}!</h1>
+    <p class="welcome-subtitle">Review your account settings</p>
+</div>
+
+<!-- Account Settings Card -->
+<div class="settings-card">
+    <h3>Account Details</h3>
+    <form>
+        <div class="form-group">
+            <label for="branch_name">Branch Name</label>
+            <input type="text" id="branch_name" value="Park Circus Branch" disabled>
+        </div>
+        
+        <div class="form-group">
+            <label for="branch_code">Branch Code</label>
+            <input type="text" id="branch_code" value="CB101" disabled>
+        </div>
+        
+        <div class="form-group">
+            <label>Account Type</label>
+            <div class="radio-group">
+                <input type="radio" id="account_type_savings" name="account_type" checked disabled>
+                <label for="account_type_savings">Savings</label>
+            </div>
+        </div>
+        
+        <div class="info-message">
+            None of these settings is changeable online. Please visit the bank in person to change them.
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scriptcontent %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Highlight current page in sidebar
+        const settingsLink = document.getElementById('settings');
+        if (settingsLink) {
+            document.querySelectorAll('.nav-card').forEach(link => link.classList.remove('current'));
+            settingsLink.classList.add('current');
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,434 @@
+{% extends 'profiles/profile_base_layout.html' %} {% block headcontent %}
+<style>
+  /* Account Status Specific Styles */
+  .welcome-section {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .welcome-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--gradient-primary);
+  }
+
+  .welcome-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .welcome-subtitle {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin: 0;
+  }
+
+  .account-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .account-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    padding: 1.25rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+  }
+
+  .account-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+  }
+
+  .account-card:hover .card-icon {
+    transform: scale(1.05);
+  }
+
+  .card-icon i {
+    font-size: 1.25rem;
+    color: white;
+  }
+
+  .card-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    font-family: "Inter", monospace;
+    word-break: break-all;
+    line-height: 1.2;
+  }
+
+  .card-subtext {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+    font-weight: 500;
+  }
+
+  .account-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    transition: var(--transition);
+  }
+
+  .account-card.primary::before {
+    background: var(--gradient-primary);
+  }
+
+  .account-card.secondary::before {
+    background: var(--gradient-secondary);
+  }
+
+  .account-card.accent::before {
+    background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  }
+
+  .account-card.primary .card-icon {
+    background: var(--gradient-primary);
+  }
+
+  .account-card.secondary .card-icon {
+    background: var(--gradient-secondary);
+  }
+
+  .account-card.accent .card-icon {
+    background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  }
+
+  /* Balance highlight effect */
+  .balance-card .card-value {
+    background: var(--gradient-secondary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+  }
+
+  /* Account number styling */
+  .account-number {
+    font-family: "Courier New", monospace;
+    letter-spacing: 2px;
+  }
+
+  /* Quick actions section */
+  .quick-actions {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    margin-top: 2rem;
+  }
+
+  .quick-actions h3 {
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .action-btn {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 600;
+    text-align: center;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .action-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+  }
+
+  .action-btn i {
+    font-size: 1.5rem;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .account-grid {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .account-card {
+      padding: 1rem;
+    }
+
+    .card-value {
+      font-size: 1.25rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .card-value {
+      font-size: 1.125rem;
+    }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    .card-icon i {
+      font-size: 1.125rem;
+    }
+  }
+
+  /* Animation for cards */
+  .account-card {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  .account-card:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .account-card:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .account-card:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Status indicator */
+  .status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #dcfce7;
+    color: #166534;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-top: 1rem;
+  }
+
+  [data-theme="dark"] .status-indicator {
+    background: #14532d;
+    color: #bbf7d0;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+</style>
+{% endblock %} {% block bodycontent %}
+<!-- Welcome Section -->
+<div class="welcome-section">
+  <h1 class="welcome-title">Welcome back, {{ user }}!</h1>
+  <p class="welcome-subtitle">
+    Here's your account overview and recent activity
+  </p>
+  <div class="status-indicator">
+    <div class="status-dot"></div>
+    Account Active
+  </div>
+</div>
+
+<!-- Account Information Grid -->
+<div class="account-grid">
+  <!-- Account Number Card -->
+  <div class="account-card primary">
+    <div class="card-icon">
+      <i class="fas fa-hashtag"></i>
+    </div>
+    <div class="card-label">Account Number</div>
+    <h2 class="card-value account-number">{{ curr_user.account_number }}</h2>
+    <p class="card-subtext">Primary Savings Account</p>
+  </div>
+
+  <!-- Balance Card -->
+  <div class="account-card secondary balance-card">
+    <div class="card-icon">
+      <i class="fas fa-wallet"></i>
+    </div>
+    <div class="card-label">Current Balance</div>
+    <h2 class="card-value">₹{{ curr_user.balance|floatformat:2 }}</h2>
+  </div>
+
+  <!-- Account Type Card -->
+  <div class="account-card accent">
+    <div class="card-icon">
+      <i class="fas fa-university"></i>
+    </div>
+    <div class="card-label">Account Type</div>
+    <h2 class="card-value">SAVINGS</h2>
+    <p class="card-subtext">High Interest Savings</p>
+  </div>
+</div>
+
+<!-- Quick Actions Section -->
+<div class="quick-actions">
+  <h3>Quick Actions</h3>
+  <div class="actions-grid">
+    <a href="{% url 'profiles:money_transfer' %}" class="action-btn">
+      <i class="fas fa-exchange-alt"></i>
+      Transfer Money
+    </a>
+    <a href="{% url 'profiles:online_pay' %}" class="action-btn">
+      <i class="fas fa-credit-card"></i>
+      Pay Bills
+    </a>
+    <a href="{% url 'profiles:ewallet' %}" class="action-btn">
+      <i class="fas fa-mobile-alt"></i>
+      eWallet
+    </a>
+    <a href="{% url 'profiles:loan_app' %}" class="action-btn">
+      <i class="fas fa-hand-holding-usd"></i>
+      Apply for Loan
+    </a>
+  </div>
+</div>
+
+<script>
+  // Add some interactivity
+  document.addEventListener("DOMContentLoaded", function () {
+    // Animate balance on load
+    const balanceElement = document.querySelector(".balance-card .card-value");
+    if (balanceElement) {
+      const finalValue = balanceElement.textContent;
+      const numericValue = parseFloat(
+        finalValue.replace("₹", "").replace(",", "")
+      );
+
+      let currentValue = 0;
+      const increment = numericValue / 50;
+      const timer = setInterval(() => {
+        currentValue += increment;
+        if (currentValue >= numericValue) {
+          currentValue = numericValue;
+          clearInterval(timer);
+        }
+        balanceElement.textContent = `₹${currentValue.toFixed(2)}`;
+      }, 30);
+    }
+
+    // Add click ripple effect to cards
+    const cards = document.querySelectorAll(".account-card");
+    cards.forEach((card) => {
+      card.addEventListener("click", function (e) {
+        const ripple = document.createElement("div");
+        ripple.style.position = "absolute";
+        ripple.style.borderRadius = "50%";
+        ripple.style.background = "rgba(255, 255, 255, 0.3)";
+        ripple.style.transform = "scale(0)";
+        ripple.style.animation = "ripple 0.6s linear";
+        ripple.style.left = e.clientX - card.offsetLeft + "px";
+        ripple.style.top = e.clientY - card.offsetTop + "px";
+
+        card.appendChild(ripple);
+
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      });
+    });
+  });
+
+  // Add ripple animation
+  const style = document.createElement("style");
+  style.textContent = `
+    @keyframes ripple {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+`;
+  document.head.appendChild(style);
+</script>
+{% endblock %}

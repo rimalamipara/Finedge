@@ -1,0 +1,541 @@
+{% extends 'profiles/profile_base_layout.html' %}
+
+{% block headcontent %}
+<style>
+    /* Money Transfer Specific Styles */
+    .welcome-section {
+        background: var(--bg-card);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .welcome-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--gradient-primary);
+    }
+
+    .welcome-title {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .welcome-subtitle {
+        font-size: 1.125rem;
+        color: var(--text-secondary);
+        font-weight: 400;
+        margin: 0;
+    }
+
+    .form-card {
+        background: var(--bg-card);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+        padding: 2.5rem;
+        margin-top: 2rem;
+    }
+
+    .form-section {
+        margin-bottom: 2.5rem;
+    }
+
+    .form-section:last-child {
+        margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .required::after {
+        content: ' *';
+        color: #ef4444;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group input[type="email"],
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        background-color: var(--bg-secondary);
+        color: var(--text-primary);
+        font-size: 1rem;
+        transition: var(--transition);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        background-color: var(--bg-primary);
+    }
+
+    .input-hint {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        margin-top: 0.25rem;
+    }
+
+    .amount-input {
+        position: relative;
+    }
+
+    .currency-symbol {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-secondary);
+        font-weight: 600;
+        pointer-events: none;
+    }
+
+    .amount-input input {
+        padding-left: 2.5rem;
+    }
+
+    .transfer-methods {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .method-option {
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        padding: 1.25rem;
+        background: var(--bg-secondary);
+        transition: var(--transition);
+        cursor: pointer;
+    }
+
+    .method-option:hover {
+        border-color: var(--primary-light);
+        background: var(--bg-primary);
+    }
+
+    .method-option.selected {
+        border-color: var(--primary-color);
+        background: rgba(59, 130, 246, 0.05);
+    }
+
+    .method-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .method-radio {
+        width: 1.25rem;
+        height: 1.25rem;
+        accent-color: var(--primary-color);
+    }
+
+    .method-name {
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .method-type {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        margin-left: auto;
+    }
+
+    .method-description {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.75rem;
+    }
+
+    .method-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 0.5rem;
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+    }
+
+    .method-detail {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .terms-checkbox {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin: 1.5rem 0;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+    }
+
+    .terms-checkbox input[type="checkbox"] {
+        width: 1.25rem;
+        height: 1.25rem;
+        accent-color: var(--primary-color);
+        margin-top: 0.125rem;
+    }
+
+    .terms-checkbox a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .terms-checkbox a:hover {
+        text-decoration: underline;
+    }
+
+    .transfer-btn {
+        width: 100%;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .transfer-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .transfer-btn:disabled {
+        background: var(--text-secondary);
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .welcome-section {
+            padding: 2rem;
+        }
+        .welcome-title {
+            font-size: 1.875rem;
+        }
+        .form-card {
+            padding: 2rem;
+        }
+        .method-details {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .welcome-section {
+            padding: 1.5rem;
+        }
+        .welcome-title {
+            font-size: 1.5rem;
+        }
+        .form-card {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block bodycontent %}
+<!-- Welcome Section -->
+<div class="welcome-section">
+    <h1 class="welcome-title">Welcome back, {{ user }}!</h1>
+    <p class="welcome-subtitle">Initiate a secure money transfer</p>
+</div>
+
+<!-- Money Transfer Form Card -->
+<div class="form-card">
+    <form action="{% url 'profiles:money_transfer' %}" method="post" id="transferForm">
+        {% csrf_token %}
+        
+        <!-- Recipient Details Section -->
+        <div class="form-section">
+            <h3 class="section-title">Recipient Details</h3>
+            
+            <div class="form-group">
+                <label for="recipient_name" class="required">Recipient Name</label>
+                <input type="text" id="recipient_name" name="recipient_name" 
+                       placeholder="Enter recipient's full name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="account_number" class="required">Account Number</label>
+                <input type="text" id="account_number" name="recipient_account_number" 
+                       placeholder="Enter account number" required>
+            </div>
+        </div>
+
+        <!-- Transfer Details Section -->
+        <div class="form-section">
+            <h3 class="section-title">Transfer Details</h3>
+            
+            <div class="form-group">
+                <label for="amount" class="required">Amount (₹)</label>
+                <div class="amount-input">
+                    <input type="number" id="amount" name="transfer_amount" 
+                           placeholder="10000" min="1" step="0.01" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="required">Transfer Method</label>
+                <div class="transfer-methods">
+                    <div class="method-option" data-method="rtgs">
+                        <div class="method-header">
+                            <input type="radio" name="transfer_method" value="rtgs" 
+                                   id="rtgs" class="method-radio" required>
+                            <label for="rtgs" class="method-name">RTGS</label>
+                            <span class="method-type">(Real Time Gross Settlement)</span>
+                        </div>
+                        <div class="method-description">
+                            Instant transfer for high-value transactions
+                        </div>
+                        <div class="method-details">
+                            <div class="method-detail">
+                                <span>Amount: ₹2,00,000 - No upper limit</span>
+                            </div>
+                            <div class="method-detail">
+                                <span>Processing: Instant</span>
+                            </div>
+                            <div class="method-detail">
+                                <span>Charges: ₹30 + GST</span>
+                            </div>
+                            <div class="method-detail">
+                                <span>Availability: Mon-Fri for this method</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="method-option" data-method="neft">
+                        <div class="method-header">
+                            <input type="radio" name="transfer_method" value="neft" 
+                                   id="neft" class="method-radio" required>
+                            <label for="neft" class="method-name">NEFT</label>
+                            <span class="method-type">(National Electronic Funds Transfer)</span>
+                        </div>
+                        <div class="method-description">
+                            Standard transfer for regular transactions
+                        </div>
+                        <div class="method-details">
+                            <div class="method-detail">
+                                <span>Amount: ₹1 - ₹20,00,000</span>
+                            </div>
+                            <div class="method-detail">
+                                <span>Processing: 30 minutes - 2 hours</span>
+                            </div>
+                            <div class="method-detail">
+                                <span>Charges: ₹2.50 - ₹25 + GST</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="method-option" data-method="imps">
+                        <div class="method-header">
+                            <input type="radio" name="transfer_method" value="imps" 
+                                   id="imps" class="method-radio" required>
+                            <label for="imps" class="method-name">IMPS</label>
+                            <span class="method-type">(Immediate Payment Service)</span>
+                        </div>
+                        <div class="method-description">
+                            Instant transfer available 24x7
+                        </div>
+                        <div class="method-details">
+                            <div class="method-detail">
+                                <span>Amount: ₹1 - ₹5,00,000</span>
+                            </div>
+                            <div class="method-detail">
+                                <span>Processing: Instant</span>
+                            </div>
+                            <div class="method-detail">
+                                <span>Charges: ₹5 - ₹15 + GST</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="purpose" class="required">Purpose</label>
+                <select id="purpose" name="purpose" required>
+                    <option value="">Select purpose of transfer</option>
+                    <option value="family_maintenance">Family Maintenance</option>
+                    <option value="education">Education</option>
+                    <option value="medical">Medical Treatment</option>
+                    <option value="business">Business Payment</option>
+                    <option value="investment">Investment</option>
+                    <option value="loan_repayment">Loan Repayment</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="remarks">Remarks (Optional)</label>
+                <textarea id="remarks" name="remarks" rows="3" 
+                          placeholder="Additional notes or reference"></textarea>
+            </div>
+        </div>
+
+        <div class="terms-checkbox">
+            <input type="checkbox" id="terms" name="terms" required>
+            <label for="terms">
+                By transferring money from your account, you agree to the 
+                <a href="#" target="_blank">Terms and Conditions</a> of amount transfer.
+            </label>
+        </div>
+        
+        <button type="submit" class="transfer-btn" id="submitBtn" disabled>
+            <i class="fas fa-paper-plane"></i>
+            Transfer Amount
+        </button>
+    </form>
+
+
+    {% if messages %}
+    <div class="message-section">
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}
+
+{% block scriptcontent %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Highlight current page in sidebar
+        const transferLink = document.getElementById('transfer');
+        if (transferLink) {
+            document.querySelectorAll('.nav-card').forEach(link => link.classList.remove('current'));
+            transferLink.classList.add('current');
+        }
+
+        // Handle transfer method selection
+        const methodOptions = document.querySelectorAll('.method-option');
+        const radioButtons = document.querySelectorAll('input[name="transfer_method"]');
+        
+        methodOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
+                
+                // Update visual selection
+                methodOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                checkFormValidity();
+            });
+        });
+
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function() {
+                methodOptions.forEach(opt => opt.classList.remove('selected'));
+                this.closest('.method-option').classList.add('selected');
+                checkFormValidity();
+            });
+        });
+
+        // Handle terms checkbox and form validation
+        const termsCheckbox = document.getElementById('terms');
+        const submitBtn = document.getElementById('submitBtn');
+        const requiredFields = document.querySelectorAll('input[required], select[required]');
+
+        function checkFormValidity() {
+            let isValid = true;
+            
+            // Check all required fields
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                }
+            });
+            
+            // Check if terms are accepted
+            if (!termsCheckbox.checked) {
+                isValid = false;
+            }
+            
+            submitBtn.disabled = !isValid;
+        }
+
+        // Add event listeners to all form inputs
+        requiredFields.forEach(field => {
+            field.addEventListener('input', checkFormValidity);
+            field.addEventListener('change', checkFormValidity);
+        });
+
+        termsCheckbox.addEventListener('change', checkFormValidity);
+
+        // Initial form validation check
+        checkFormValidity();
+
+        // Format amount input
+        const amountInput = document.getElementById('amount');
+        amountInput.addEventListener('input', function() {
+            // Remove any non-numeric characters except decimal point
+            this.value = this.value.replace(/[^0-9.]/g, '');
+            
+            // Ensure only one decimal point
+            const parts = this.value.split('.');
+            if (parts.length > 2) {
+                this.value = parts[0] + '.' + parts.slice(1).join('');
+            }
+        });
+    });
+</script>
+{% endblock %}
